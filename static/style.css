@@ -834,7 +834,8 @@ button, input, textarea { font-family: 'Klee One', cursive; }
     transition: color 0.2s;
 }
 #user-list .user-row span:hover { color: var(--accent-1); }
-#user-list .user-self { padding: 8px 0; font-size: 0.9rem; color: var(--text-muted); opacity: 0.5; }
+#user-list .user-self { padding: 8px 0; font-size: 0.9rem; color: var(--text-primary); cursor: pointer; }
+#user-list .user-self:hover { color: var(--accent-1); }
 .user-dm {
     background: none; border: none; cursor: pointer; font-size: 0.85rem;
     padding: 2px 4px; border-radius: 6px; opacity: 0.4;

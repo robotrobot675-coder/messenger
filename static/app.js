@@ -628,7 +628,7 @@ function addMessage(data, noAnim) {
 function updateUsers(data) {
     const list = document.getElementById("user-list");
     list.innerHTML = data.users.map(u => {
-        if (u === username) return `<div class="user-self"><span class="online-dot"></span>${escapeHtml(u)}</div>`;
+        if (u === username) return `<div class="user-self" onclick="openProfile('${escapeHtml(u)}')"><span class="online-dot"></span>${escapeHtml(u)}</div>`;
         return `<div class="user-row"><span class="online-dot"></span><span onclick="openProfile('${escapeHtml(u)}')">${escapeHtml(u)}</span><button class="user-call" onclick="initiateCall('${escapeHtml(u)}', false)" title="Video call ${escapeHtml(u)}">📹</button><button class="user-call" onclick="initiateCall('${escapeHtml(u)}', true)" title="Audio call ${escapeHtml(u)}">🔊</button><button class="user-dm" onclick="openDM('${escapeHtml(u)}')" title="DM ${escapeHtml(u)}">💬</button></div>`;
     }).join("");
 }
