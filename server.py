@@ -12,7 +12,7 @@ from google.auth.transport import requests as google_requests
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.urandom(24).hex()
-socketio = SocketIO(app, cors_allowed_origins="*")
+socketio = SocketIO(app, cors_allowed_origins="*", max_http_buffer_size=25_000_000)
 
 DB_PATH = os.path.join(os.path.dirname(__file__), "chat.db")
 
@@ -283,7 +283,7 @@ def handle_share_image(data):
     if not user_info:
         return
     img_data = data.get("image", "").strip()
-    if not img_data or len(img_data) > 500000:
+    if not img_data or len(img_data) > 20000000:
         return
     ts = time.time()
     msg_id = save_message(user_info["room"], user_info["username"], img_data, "image")

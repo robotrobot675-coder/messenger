@@ -1020,13 +1020,33 @@ function shareAudio() {
 function shareImage() {
     const input = document.getElementById("img-upload");
     if (!input.files || !input.files[0]) return;
+    const file = input.files[0];
     const reader = new FileReader();
     reader.onload = (e) => {
-        const data = e.target.result;
-        if (data.length > 500000) { alert("Image too large (max 500KB)"); return; }
-        socket.emit("share_image", { image: data });
+        let data = e.target.result;
+        if (data.length > 1000000) {
+            const img = new Image();
+            img.onload = () => {
+                const maxW = 1920, maxH = 1920;
+                let w = img.width, h = img.height;
+                if (w > maxW || h > maxH) {
+                    const r = Math.min(maxW / w, maxH / h);
+                    w = Math.round(w * r); h = Math.round(h * r);
+                }
+                const c = document.createElement("canvas");
+                c.width = w; c.height = h;
+                const ctx = c.getContext("2d");
+                ctx.drawImage(img, 0, 0, w, h);
+                data = c.toDataURL("image/jpeg", 0.85);
+                if (data.length > 20000000) { alert("Image too large even after compression"); return; }
+                socket.emit("share_image", { image: data });
+            };
+            img.src = data;
+        } else {
+            socket.emit("share_image", { image: data });
+        }
     };
-    reader.readAsDataURL(input.files[0]);
+    reader.readAsDataURL(file);
     input.value = "";
 }
 
