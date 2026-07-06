@@ -909,6 +909,11 @@ button, input, textarea { font-family: 'Klee One', cursive; }
     border: 1px solid var(--border) !important;
 }
 .btn-call:hover { border-color: #2ecc71 !important; color: #2ecc71; }
+.credit {
+    padding: 12px; text-align: center; font-size: 0.75rem;
+    color: var(--text-muted); border-top: 1px solid var(--border-light);
+    margin-top: auto;
+}
 .user-call {
     background: none; border: none; cursor: pointer; font-size: 0.9em;
     padding: 2px 4px; border-radius: 6px; transition: all 0.2s;

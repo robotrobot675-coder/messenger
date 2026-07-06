@@ -330,6 +330,11 @@ function joinChat() {
 }
 
 function leaveChat() { location.reload(); }
+
+function switchGoogleAccount() {
+    google.accounts.id.disableAutoSelect();
+    google.accounts.id.prompt();
+}
 function goToGeneral() {
     document.getElementById("current-room").textContent = "#general";
     document.getElementById("current-room").className = "";
@@ -446,6 +451,13 @@ socket.on("profile_data", (data) => {
         editBtn.textContent = "Edit Profile";
         editBtn.onclick = () => openEditProfile(data);
         actions.appendChild(editBtn);
+        if (googlePic) {
+            const switchBtn = document.createElement("button");
+            switchBtn.className = "btn-edit";
+            switchBtn.textContent = "🔄 Switch Google";
+            switchBtn.onclick = () => { closeProfileModal(); switchGoogleAccount(); };
+            actions.appendChild(switchBtn);
+        }
     } else {
         if (data.is_following) {
             const btn = document.createElement("button");

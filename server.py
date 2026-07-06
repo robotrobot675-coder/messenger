@@ -12,7 +12,7 @@ from google.auth.transport import requests as google_requests
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.urandom(24).hex()
-socketio = SocketIO(app, cors_allowed_origins="*", max_http_buffer_size=25_000_000)
+socketio = SocketIO(app, cors_allowed_origins="*", max_http_buffer_size=25_000_000, async_mode="eventlet")
 
 DB_PATH = os.path.join(os.path.dirname(__file__), "chat.db")
 

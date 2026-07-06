@@ -3,3 +3,4 @@ Flask-SocketIO>=5.3
 python-socketio[client]>=5.11
 google-auth>=2.29
 eventlet>=0.36
+gunicorn>=22
