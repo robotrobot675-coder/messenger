@@ -437,6 +437,7 @@ button, input, textarea { font-family: 'Klee One', cursive; }
 
 #main {
     flex: 1;
+    min-height: 0;
     display: flex;
     flex-direction: column;
     background: color-mix(in srgb, var(--bg-primary) 70%, transparent);
@@ -971,13 +972,13 @@ button, input, textarea { font-family: 'Klee One', cursive; }
 @media (max-width: 768px) {
     #chat { flex-direction: column; }
     #sidebar {
-        width: 100%; max-height: 50vh; overflow-y: auto;
+        width: 100%; max-height: 40vh; overflow-y: auto;
         border-right: none; border-bottom: 1px solid var(--border);
     }
     #sidebar.hidden { display: none; }
-    #main { width: 100%; }
+    #main { flex: 1; width: 100%; min-height: 0; display: flex; flex-direction: column; }
     #main.full { width: 100%; }
-    #login .glass-box { width: 90%; padding: 24px; }
+    #messages { flex: 1; min-height: 0; }
     #input-area { flex-wrap: wrap; padding: 8px; }
     #input-area input[type="text"] { flex: 1 1 100%; order: 1; margin-bottom: 6px; }
     #input-area button { font-size: 0.85em; padding: 6px 10px; }
@@ -987,7 +988,7 @@ button, input, textarea { font-family: 'Klee One', cursive; }
     #profile-modal .modal-content { width: 92%; }
     #theme-grid { gap: 6px; }
     .theme-dot { width: 28px; height: 28px; }
-    #user-list { max-height: 150px; }
+    #user-list { max-height: 120px; }
     .call-card { min-width: auto; width: 90%; padding: 20px; }
     .active-call-card { min-width: auto; }
     #call-videos video { width: 100%; max-width: 100%; }
