@@ -14,8 +14,8 @@ socketio = SocketIO(app, cors_allowed_origins="*")
 DB_PATH = os.path.join(os.path.dirname(__file__), "chat.db")
 
 config_path = os.path.join(os.path.dirname(__file__), "config.json")
-GOOGLE_CLIENT_ID = ""
-if os.path.exists(config_path):
+GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID", "")
+if not GOOGLE_CLIENT_ID and os.path.exists(config_path):
     with open(config_path) as f:
         cfg = json.load(f)
     GOOGLE_CLIENT_ID = cfg.get("GOOGLE_CLIENT_ID", "")
@@ -513,4 +513,6 @@ def handle_disconnect():
         emit("users", {"users": rooms.get(room, [])}, room=room)
 
 if __name__ == "__main__":
-    socketio.run(app, host="0.0.0.0", port=5000, debug=True, allow_unsafe_werkzeug=True)
+    port = int(os.environ.get("PORT", 5000))
+    debug = os.environ.get("FLASK_ENV") == "development"
+    socketio.run(app, host="0.0.0.0", port=port, debug=debug, allow_unsafe_werkzeug=debug)
