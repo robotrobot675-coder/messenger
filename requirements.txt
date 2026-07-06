@@ -1,7 +1,6 @@
-Flask==3.0.0
-Flask-SocketIO==5.3.6
-python-socketio[client]==5.11.4
-gevent-websocket==0.10.2
-gevent==24.2.1
-google-auth==2.29.0
-gunicorn==22.0.0
+Flask>=3.0
+Flask-SocketIO>=5.3
+python-socketio[client]>=5.11
+google-auth>=2.29
+gunicorn>=22
+eventlet>=0.36
