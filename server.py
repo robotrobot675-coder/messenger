@@ -7,7 +7,7 @@ import sqlite3
 from google.oauth2 import id_token
 from google.auth.transport import requests as google_requests
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder=".")
 app.config["SECRET_KEY"] = os.urandom(24).hex()
 socketio = SocketIO(app, cors_allowed_origins="*")
 
