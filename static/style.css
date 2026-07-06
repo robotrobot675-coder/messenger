@@ -966,3 +966,31 @@ button, input, textarea { font-family: 'Klee One', cursive; }
     display: flex; align-items: center; gap: 6px;
 }
 .voice-icon { font-size: 1.1em; }
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    #chat { flex-direction: column; }
+    #sidebar {
+        width: 100%; max-height: 50vh; overflow-y: auto;
+        border-right: none; border-bottom: 1px solid var(--border);
+    }
+    #sidebar.hidden { display: none; }
+    #main { width: 100%; }
+    #main.full { width: 100%; }
+    #login .glass-box { width: 90%; padding: 24px; }
+    #input-area { flex-wrap: wrap; padding: 8px; }
+    #input-area input[type="text"] { flex: 1 1 100%; order: 1; margin-bottom: 6px; }
+    #input-area button { font-size: 0.85em; padding: 6px 10px; }
+    .msg-img { max-width: 100%; }
+    .msg-audio { max-width: 100%; }
+    .modal-content { width: 92%; margin: 10% auto; padding: 16px; }
+    #profile-modal .modal-content { width: 92%; }
+    #theme-grid { gap: 6px; }
+    .theme-dot { width: 28px; height: 28px; }
+    #user-list { max-height: 150px; }
+    .call-card { min-width: auto; width: 90%; padding: 20px; }
+    .active-call-card { min-width: auto; }
+    #call-videos video { width: 100%; max-width: 100%; }
+    #emoji-picker { width: 260px; }
+    .user-row span { font-size: 0.85em; }
+}
