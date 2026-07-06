@@ -336,6 +336,9 @@ button, input, textarea { font-family: 'Klee One', cursive; }
 }
 .hidden { display: none !important; }
 
+#sidebar.hidden { display: none; }
+#main.full { width: 100%; max-width: 100%; }
+
 #sidebar {
     width: var(--sidebar-width);
     background: var(--bg-secondary);

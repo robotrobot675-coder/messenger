@@ -331,6 +331,13 @@ function joinChat() {
 
 function leaveChat() { location.reload(); }
 
+function toggleFullscreen() {
+    document.getElementById("sidebar").classList.toggle("hidden");
+    document.getElementById("main").classList.toggle("full");
+    const btn = document.getElementById("fullscreen-btn");
+    btn.textContent = btn.textContent === "⛶" ? "☰" : "⛶";
+}
+
 function switchGoogleAccount() {
     google.accounts.id.disableAutoSelect();
     google.accounts.id.prompt();
