@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="naruko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Chat App</title>
+    <link rel="stylesheet" href="/static/style.css?v=19">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css">
+</head>
+<body>
+    <div id="loading-screen">
+        <div class="loading-titles">
+            <h1 class="main-title">
+                <span>C</span><span>h</span><span>a</span><span>t</span><span>V</span><span>e</span><span>r</span><span>s</span><span>e</span>
+            </h1>
+            <p class="sub-title">
+                <span>3</span><span>D</span><span> </span><span>C</span><span>h</span><span>a</span><span>t</span>
+            </p>
+        </div>
+    </div>
+
+    <svg xmlns="http://www.w3.org/2000/svg" style="display: none">
+        <defs>
+            <filter id="water-wave">
+                <feTurbulence type="fractalNoise" baseFrequency="0.1" numOctaves="1" result="noise"/>
+                <feDisplacementMap in="SourceGraphic" in2="noise" scale="0" xChannelSelector="R" yChannelSelector="G" result="displacement"/>
+            </filter>
+        </defs>
+    </svg>
+
+    <canvas id="bg-canvas"></canvas>
+
+    <div id="login">
+        <div class="glass-box">
+            <h1>✦ ChatVerse</h1>
+            <p class="subtitle">Enter the 3D realm</p>
+            <input type="text" id="username" placeholder="Your name" autofocus>
+            <input type="text" id="room" placeholder="Room (default: general)">
+            <button onclick="joinChat()">Launch</button>
+            <div class="divider"><span>or</span></div>
+            <div id="g_id_onload" data-client_id="{{ google_client_id }}" data-context="signin" data-ux_mode="popup" data-callback="handleGoogleCredential" data-auto_select="false" data-itp_support="true"></div>
+            <div class="g_id_signin" data-type="standard" data-shape="pill" data-theme="outline" data-text="signin_with" data-size="large" data-logo_alignment="left"></div>
+        </div>
+    </div>
+
+    <div id="chat" class="hidden">
+        <div id="sidebar">
+            <div id="room-header">
+                <h2 id="current-room">#general</h2>
+                <div class="room-actions">
+                    <button id="go-general" class="hidden" onclick="goToGeneral()" title="Back to general">← General</button>
+                    <button class="clear-btn" onclick="clearChat()" title="Clear chat">🗑</button>
+                    <button onclick="leaveChat()">Exit</button>
+                </div>
+            </div>
+            <div id="user-list"></div>
+            <div id="theme-section">
+                <p>Theme</p>
+                <div id="theme-grid"></div>
+            </div>
+        </div>
+        <div id="main">
+            <div id="messages"></div>
+            <div id="typing-indicator" class="hidden">
+                <span id="typing-text"></span>
+                <div class="typing-dots"><span></span><span></span><span></span></div>
+            </div>
+            <div id="input-area">
+                <button id="emoji-btn" onclick="toggleEmojiPicker()">😊</button>
+                <input type="text" id="msg-input" placeholder="Type a message..." autofocus>
+                <button class="media-btn" id="voice-btn" onclick="toggleVoiceRecord()" title="Record Voice">🎤</button>
+                <button class="media-btn" onclick="document.getElementById('img-upload').click()" title="Send Image">🖼</button>
+                <button class="media-btn" onclick="document.getElementById('audio-upload').click()" title="Send Audio">🎵</button>
+                <input type="file" id="img-upload" accept="image/*" style="display:none" onchange="shareImage()">
+                <input type="file" id="audio-upload" accept="audio/*" style="display:none" onchange="shareAudio()">
+                <span id="voice-timer" class="hidden">🔴 <span id="voice-sec">0</span>s</span>
+                <button onclick="send()">Send</button>
+            </div>
+            <div id="emoji-picker" class="hidden"></div>
+        </div>
+    </div>
+
+    <div id="profile-modal" class="modal hidden">
+        <div class="modal-backdrop" onclick="closeProfileModal()"></div>
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeProfileModal()">✕</button>
+            <div id="profile-display">
+                <div id="profile-avatar" class="profile-avatar"></div>
+                <h2 id="profile-username"></h2>
+                <p id="profile-bio" class="profile-bio"></p>
+                <div id="profile-stats" class="profile-stats">
+                    <div><span id="profile-followers">0</span> followers</div>
+                    <div><span id="profile-following">0</span> following</div>
+                </div>
+                <div id="profile-status" class="profile-status"></div>
+                <div id="profile-actions"></div>
+            </div>
+            <div id="profile-edit" class="hidden">
+                <h3>Edit Profile</h3>
+                <label>Avatar</label>
+                <div id="avatar-picker"></div>
+                <button class="upload-pic-btn" onclick="document.getElementById('pic-upload').click()">📷 Upload Photo</button>
+                <input type="file" id="pic-upload" accept="image/*" style="display:none" onchange="handlePicUpload(this)">
+                <label>Bio</label>
+                <textarea id="bio-input" maxlength="150" placeholder="Write something about yourself..."></textarea>
+                <div class="edit-actions">
+                    <button onclick="cancelEditProfile()">Cancel</button>
+                    <button onclick="saveProfile()">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="crop-modal" class="modal hidden">
+        <div class="modal-backdrop" onclick="closeCropModal()"></div>
+        <div class="modal-content crop-content">
+            <button class="modal-close" onclick="closeCropModal()">✕</button>
+            <h3>Crop Photo</h3>
+            <div id="crop-container"></div>
+            <div class="crop-actions">
+                <button onclick="closeCropModal()">Cancel</button>
+                <button class="crop-apply" onclick="applyCrop()">Crop & Upload</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="incoming-call" class="call-overlay hidden">
+        <div class="call-card">
+            <div class="call-avatar" id="caller-avatar">📞</div>
+            <h3 id="caller-name">Someone</h3>
+            <p id="caller-audio-only" style="display:none;font-size:0.85em">🔊 Audio call</p>
+            <p id="caller-call-msg">is calling...</p>
+            <div class="call-actions">
+                <button class="call-reject-btn" onclick="rejectCall()">✕ Reject</button>
+                <button class="call-accept-btn" onclick="acceptCall()">✓ Accept</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="active-call" class="call-overlay hidden">
+        <div class="call-card active-call-card">
+            <div class="call-avatar" id="active-caller-avatar">📞</div>
+            <h3 id="active-caller-name">Calling...</h3>
+            <p id="call-status">Connecting...</p>
+            <div id="call-videos">
+                <video id="remote-video" autoplay playsinline></video>
+                <video id="local-video" autoplay playsinline muted></video>
+            </div>
+            <div class="call-actions">
+                <button id="call-mute-btn" class="call-mute-btn" onclick="toggleMute()">🔊 Mute</button>
+                <button class="call-end-btn" onclick="endCall()">✕ End</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://accounts.google.com/gsi/client"></script>
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
+    <script src="/static/app.js?v=27"></script>
+</body>
+</html>
